@@ -13,6 +13,7 @@
 		<filename plugin="switcher">switcher.php</filename>
 		<folder>language</folder>
 		<folder>fields</folder>
+		<folder>tmpl</folder>
 	</files>
 	<config>
 		<fields name="params" addfieldpath="/plugins/editors/switcher/fields">
