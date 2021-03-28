@@ -21,8 +21,23 @@ use Joomla\Utilities\ArrayHelper;
  */
 class plgEditorSwitcher extends JPlugin
 {
+	/**
+	 * Application object
+	 *
+	 * @var    JApplicationCms
+	 * @since  3.2
+	 */
+	protected $app;
+
 	protected $_switchereditor = null;
-	protected $cookiename = 'editorswitchercurrent';
+
+	/**
+	 * The name of the cookie
+	 *
+	 * @var string
+	 * @since 1.0
+	 */
+	protected $cookieName = 'editorswitchercurrent';
 
 	/**
 	 * Constructor
@@ -34,7 +49,7 @@ class plgEditorSwitcher extends JPlugin
 	 */
 	public function __construct(&$subject, $config)
 	{
-		$editor = JRequest::getVar($this->cookiename, 'switcher', 'cookie', 'cmd');
+		$editor = JRequest::getVar($this->cookieName, 'switcher', 'cookie', 'cmd');
 
 		if ($editor == 'switcher')
 		{

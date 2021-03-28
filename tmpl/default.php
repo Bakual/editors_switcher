@@ -1,8 +1,6 @@
 <?php
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.framework');
-
 //onchange
 $js = 'onchange="';
 if ($confirmation)
@@ -15,10 +13,11 @@ if ($confirmation)
 	$js .= 'jQuery(\'#editorswitcher-currentvalue\').value = this.options.selectedIndex;';
 }
 
-$domain = JURI::getInstance()->getHost();
-$days   = intval($params->get('cookie_days', 365));
-$js     .= "Cookie.write('$this->cookiename', this.value, {duration:'$days', domain:'$domain'});";
-$js     .= "Cookie.write('$this->cookiename', this.value, {duration:$days});window.location.reload();";
+$domain  = $this->app->get('cookie_domain', '');
+$path    = $this->app->get('cookie_path', '/');
+$expires = gmdate('r', time() + $params->get('cookie_days', 365) * 24 * 60 * 60);
+$js      .= 'document.cookie = \'' . $this->cookieName . '=\'+this.value+\';domain=' . $domain . ';path=' . $path . ';expires=' . $expires . '\';';
+$js      .= 'window.location.reload();';
 
 if ($confirmation)
 {
@@ -27,10 +26,10 @@ if ($confirmation)
 }
 $js .= '"';
 ?>
-<div id="switcherSelector" class="btn-toolbar">
-	<input type="hidden" id="editorswitcher-currentvalue" value="<?php echo $current; ?>" />
-		<?php echo JHtml::_('select.genericlist', $editors, 'switcheditor' . ''
-				, 'class="btn" ' . $js, 'value', 'text', $current, 'jswitcheditor'); ?>
+<div id="switcherSelector" class="btn-toolbar pull-right" style="margin-right:5px;">
+	<input type="hidden" id="editorswitcher-currentvalue" value="<?php echo $current; ?>"/>
+	<?php echo JHtml::_('select.genericlist', $editors, 'switcheditor' . ''
+			, $js, 'value', 'text', $current, 'jswitcheditor'); ?>
 </div>
 <?php
 // Write html and move and init list index
