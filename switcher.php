@@ -232,6 +232,7 @@ class plgEditorSwitcher extends JPlugin
 
 			$db->setQuery($query);
 			$editors = $db->loadObjectList();
+
 			if (count($editors) < 2)
 			{
 				$selector = '';
@@ -243,6 +244,7 @@ class plgEditorSwitcher extends JPlugin
 			$count = 0;
 			$index = 0;
 			$array = array();
+
 			foreach ($editors as $o)
 			{
 				$array[$o->value] = $count;
@@ -255,14 +257,10 @@ class plgEditorSwitcher extends JPlugin
 				$count++;
 			}
 
-			$params       = JPluginHelper::getPlugin('editors', 'switcher')->params;
-			$confirmation = $params->get('confirmation', 1);
-
 			// Render the select field
 			ob_start();
 			include PluginHelper::getLayoutPath('editors', 'switcher');
 			$selector = ob_get_clean();
-
 		}
 
 		return $selector;
