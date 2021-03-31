@@ -13,19 +13,33 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 /**
  * Editor Switcher Plugin
+ *
+ * @since 1.0
  */
-class plgEditorSwitcher extends JPlugin
+class plgEditorSwitcher extends CMSPlugin
 {
+	/**
+	 * A Registry object holding the parameters for the plugin
+	 *
+	 * @var    Registry
+	 * @since  2.0
+	 */
+	public $params = null;
+
 	/**
 	 * Application object
 	 *
 	 * @var    JApplicationCms
-	 * @since  3.2
+	 * @since  2.0
 	 */
 	protected $app;
 
@@ -45,155 +59,187 @@ class plgEditorSwitcher extends JPlugin
 	 * @param object $subject The object to observe
 	 * @param array  $config  An array that holds the plugin configuration
 	 *
-	 * @since       1.5
+	 * @since       2.0
 	 */
 	public function __construct(&$subject, $config)
 	{
-		$editor = JRequest::getVar($this->cookieName, 'switcher', 'cookie', 'cmd');
+		parent::__construct($subject, $config);
+
+		$editor = $this->app->input->cookie->get($this->cookieName, 'switcher');
 
 		if ($editor == 'switcher')
 		{
-			$editor = JPluginHelper::getPlugin('editors', 'switcher')->params->get('default_editor', 'none');
+			$editor = $this->params->get('default_editor', 'tinymce');
 		}
 
-		if (file_exists(dirname(dirname(__FILE__)) . '/' . $editor . '/' . $editor . '.php') && JPluginHelper::isEnabled('editors', $editor))
+		if (file_exists(JPATH_PLUGINS . '/editors/' . $editor . '/' . $editor . '.php')
+			&& PluginHelper::isEnabled('editors', $editor))
 		{
-			$plugin = JPluginHelper::getPlugin('editors', $editor);
-			$this->setSwitcherEditor($subject, $config, $plugin);
+			$plugin = PluginHelper::getPlugin('editors', $editor);
+			$this->setSwitcherEditor($subject, $plugin);
 		}
 		else
 		{
-			$plugins = JPluginHelper::getPlugin('editors');
+			// Get first editor found
+			$plugins = PluginHelper::getPlugin('editors');
 			$plugin  = null;
-			if (count($plugins))
+
+			foreach ($plugins as $v)
 			{
-				foreach ($plugins as $v)
+				if ($v->name != 'switcher')
 				{
-					if ($v->name != 'switcher')
-					{
-						$plugin = $v;
-						break;
-					}
+					$plugin = $v;
+					break;
 				}
 			}
 
 			if ($plugin)
 			{
-				$this->setSwitcherEditor($subject, $config, $plugin);
+				$this->setSwitcherEditor($subject, $plugin);
 			}
 			else
 			{
-				JError::raiseWarning('SOME_ERROR_CODE', JText::_('PLG_EDITOR_SWITCHER_EDITORWASNOTFOUND'));
+				$this->app->enqueueMessage(Text::_('PLG_EDITOR_SWITCHER_EDITORWASNOTFOUND'), 'warning');
 			}
 		}
-
-		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Create the selected editor
 	 *
 	 * @param object $subject
-	 * @param array  $config
 	 * @param object $plugin
+	 *
+	 * @since 1.0
 	 */
-	private function setSwitcherEditor($subject, &$config, $plugin)
+	private function setSwitcherEditor($subject, $plugin)
 	{
 		$editor = $plugin->name;
 
-		$config['params'] = $plugin->params;
-		$config['name']   = strtolower($editor);
-		$config['type']   = 'editor';
-
 		require_once JPATH_PLUGINS . '/editors/' . $editor . '/' . $editor . '.php';
 		$classname = 'plgEditor' . ucfirst($editor);
-		JFactory::getLanguage()->load('plg_editors_' . $editor, JPATH_ADMINISTRATOR);
-		$this->_switchereditor = new $classname($subject, $config);
+		$lang      = Factory::getLanguage();
+
+		// Load language if not already done.
+		if (!$lang->getPaths('plg_editors_' . $editor))
+		{
+			$lang->load('plg_editors_' . $editor, JPATH_ADMINISTRATOR)
+			|| $lang->load('plg_editors_' . $editor, JPATH_PLUGINS . '/editors/' . $editor);
+		}
+
+		$this->_switchereditor = new $classname($subject, (array) $plugin);
 	}
 
 	/**
-	 * Initialises the selected Editor.
+	 * Initialises the Editor.
 	 *
-	 * @return  string  JavaScript Initialization string
+	 * @return  void
 	 *
-	 * @since 1.5
+	 * @since   1.0
 	 */
 	public function onInit()
 	{
 		if (is_callable(array($this->_switchereditor, 'onInit')))
 		{
-			return $this->_switchereditor->onInit();
+			$this->_switchereditor->onInit();
 		}
 	}
 
 	/**
-	 * Selected Editor - get the editor content
+	 * Get the editor content
 	 *
-	 * @param string  The name of the editor
+	 * @param string $id The name of the editor
 	 *
-	 * @return string
+	 * @return  string
+	 *
+	 * @since      1.0
+	 *
+	 * @deprecated 4.0 Use directly the returned code
 	 */
-	public function onGetContent($editor)
+	public function onGetContent($id)
 	{
 		if (is_callable(array($this->_switchereditor, 'onGetContent')))
 		{
-			return $this->_switchereditor->onGetContent($editor);
+			return $this->_switchereditor->onGetContent($id);
 		}
+
+		return '';
 	}
 
 	/**
-	 * Selected Editor - set the editor content
+	 * Set the editor content
 	 *
-	 * @param string  The name of the editor
+	 * @param string $id   The name of the editor
+	 * @param string $html The html to place in the editor
 	 *
 	 * @return  string
+	 *
+	 * @since      1.0
+	 *
+	 * @deprecated 4.0 Use directly the returned code
 	 */
-	public function onSetContent($editor, $html)
+	public function onSetContent($id, $html)
 	{
 		if (is_callable(array($this->_switchereditor, 'onSetContent')))
 		{
-			return $this->_switchereditor->onSetContent($editor, $html);
+			return $this->_switchereditor->onSetContent($id, $html);
 		}
+
+		return '';
 	}
 
 	/**
-	 * Selected Editor - copy editor content to form field
+	 * Copy editor content to form field
 	 *
-	 * @param string  The name of the editor
+	 * @param string $id The name of the editor
 	 *
 	 * @return  string
+	 *
+	 * @since      1.0
+	 *
+	 * @deprecated 4.0 Use directly the returned code
 	 */
-	public function onSave($editor)
+	public function onSave($id)
 	{
 		if (is_callable(array($this->_switchereditor, 'onSave')))
 		{
-			return $this->_switchereditor->onSave($editor);
+			return $this->_switchereditor->onSave($id);
 		}
+
+		return '';
 	}
 
 	/**
 	 * Display the editor area.
 	 *
-	 * @param string   The name of the editor area.
-	 * @param string   The content of the field.
-	 * @param string   The width of the editor area.
-	 * @param string   The height of the editor area.
-	 * @param int      The number of columns for the editor area.
-	 * @param int      The number of rows for the editor area.
-	 * @param boolean  True and the editor buttons will be displayed.
-	 * @param string   An optional ID for the textarea. If not supplied the name is used.
+	 * @param string  $name    The name of the editor area.
+	 * @param string  $content The content of the field.
+	 * @param string  $width   The width of the editor area.
+	 * @param string  $height  The height of the editor area.
+	 * @param int     $col     The number of columns for the editor area.
+	 * @param int     $row     The number of rows for the editor area.
+	 * @param boolean $buttons True and the editor buttons will be displayed.
+	 * @param string  $id      An optional ID for the textarea. If not supplied the name is used.
+	 * @param string  $asset   The object asset
+	 * @param object  $author  The author.
+	 * @param array   $params  Associative array of editor parameters.
 	 *
 	 * @return  string
+	 * @since 1.0
+	 *
 	 */
-	public function onDisplay($name, $content, $width, $height, $col, $row, $buttons = true, $id = null, $asset = null, $author = null)
+	public function onDisplay(
+		$name, $content, $width, $height, $col, $row, $buttons = true, $id = null, $asset = null, $author = null, $params = array())
 	{
 		if (is_callable(array($this->_switchereditor, 'onDisplay')))
 		{
-			$return = $this->_switchereditor->onDisplay($name, $content, $width, $height, $col, $row, $buttons, $id, $asset, $author);
+			$return = $this->_switchereditor->onDisplay($name, $content, $width, $height, $col, $row, $buttons, $id, $asset, $author, $params);
 			$return .= $this->setEditorSelector($this->_switchereditor->_name);
 
 			return $return;
 		}
+
+		return '';
 	}
 
 	/**
@@ -266,6 +312,17 @@ class plgEditorSwitcher extends JPlugin
 		return $selector;
 	}
 
+	/**
+	 * Inserts html code into the editor
+	 *
+	 * @param string $name The name of the editor
+	 *
+	 * @return  string
+	 *
+	 * @since      1.0
+	 *
+	 * @deprecated 4.0 Code is loaded in the init script
+	 */
 	public function onGetInsertMethod($name)
 	{
 		if (is_callable(array($this->_switchereditor, 'onGetInsertMethod')))
@@ -273,7 +330,6 @@ class plgEditorSwitcher extends JPlugin
 			return $this->_switchereditor->onGetInsertMethod($name);
 		}
 
-		return true;
+		return '';
 	}
-
 }
