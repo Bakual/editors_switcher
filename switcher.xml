@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.0" type="plugin" group="editors" method="upgrade">
+<extension version="3.9" type="plugin" group="editors" method="upgrade">
 	<name>plg_editors_switcher</name>
-	<version>1.7.2</version>
-	<author>Yoshiki Kozaki(www.joomler.net)</author>
-	<authorEmail>info@joomler.net</authorEmail>
-	<authorUrl>http://www.joomler.net</authorUrl>
-	<creationDate>Oct 2012</creationDate>
-	<copyright>(C) 2007-2012 Yoshiki Kozaki(www.joomler.net)</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>2.0.0</version>
+	<author>Thomas Hunziker (www.bakual.net), Yoshiki Kozaki(www.joomler.net)</author>
+	<authorEmail>bakual@bakual.net</authorEmail>
+	<authorUrl>https://www.bakual.net</authorUrl>
+	<creationDate>2021-04-01</creationDate>
+	<copyright>(C) 2021</copyright>
+	<license>http://www.gnu.org/licenses/gpl.html</license>
 	<description>PLG_EDITOR_SWITCHER_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="switcher">switcher.php</filename>
@@ -15,6 +15,9 @@
 		<folder>fields</folder>
 		<folder>tmpl</folder>
 	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="Bakual.net">http://www.bakual.net/update/plg_editors_switcher.xml</server>
+	</updateservers>
 	<config>
 		<fields name="params" addfieldpath="/plugins/editors/switcher/fields">
 			<fieldset name="Basic">
