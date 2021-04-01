@@ -43,7 +43,21 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	protected $app;
 
-	protected $_switchereditor = null;
+	/**
+	 * The selected Editor class
+	 *
+	 * @var    CMSPlugin
+	 * @since  2.0
+	 */
+	protected $switcherEditor;
+
+	/**
+	 * List of available editors
+	 *
+	 * @var    array
+	 * @since  2.0
+	 */
+	protected $editors;
 
 	/**
 	 * The name of the cookie
@@ -127,7 +141,7 @@ class plgEditorSwitcher extends CMSPlugin
 			|| $lang->load('plg_editors_' . $editor, JPATH_PLUGINS . '/editors/' . $editor);
 		}
 
-		$this->_switchereditor = new $classname($subject, (array) $plugin);
+		$this->switcherEditor = new $classname($subject, (array) $plugin);
 	}
 
 	/**
@@ -139,9 +153,9 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	public function onInit()
 	{
-		if (is_callable(array($this->_switchereditor, 'onInit')))
+		if (is_callable(array($this->switcherEditor, 'onInit')))
 		{
-			$this->_switchereditor->onInit();
+			$this->switcherEditor->onInit();
 		}
 	}
 
@@ -158,9 +172,9 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	public function onGetContent($id)
 	{
-		if (is_callable(array($this->_switchereditor, 'onGetContent')))
+		if (is_callable(array($this->switcherEditor, 'onGetContent')))
 		{
-			return $this->_switchereditor->onGetContent($id);
+			return $this->switcherEditor->onGetContent($id);
 		}
 
 		return '';
@@ -180,9 +194,9 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	public function onSetContent($id, $html)
 	{
-		if (is_callable(array($this->_switchereditor, 'onSetContent')))
+		if (is_callable(array($this->switcherEditor, 'onSetContent')))
 		{
-			return $this->_switchereditor->onSetContent($id, $html);
+			return $this->switcherEditor->onSetContent($id, $html);
 		}
 
 		return '';
@@ -201,9 +215,9 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	public function onSave($id)
 	{
-		if (is_callable(array($this->_switchereditor, 'onSave')))
+		if (is_callable(array($this->switcherEditor, 'onSave')))
 		{
-			return $this->_switchereditor->onSave($id);
+			return $this->switcherEditor->onSave($id);
 		}
 
 		return '';
@@ -231,10 +245,10 @@ class plgEditorSwitcher extends CMSPlugin
 	public function onDisplay(
 		$name, $content, $width, $height, $col, $row, $buttons = true, $id = null, $asset = null, $author = null, $params = array())
 	{
-		if (is_callable(array($this->_switchereditor, 'onDisplay')))
+		if (is_callable(array($this->switcherEditor, 'onDisplay')))
 		{
-			$return = $this->_switchereditor->onDisplay($name, $content, $width, $height, $col, $row, $buttons, $id, $asset, $author, $params);
-			$return .= $this->setEditorSelector($this->_switchereditor->_name);
+			$return = $this->switcherEditor->onDisplay($name, $content, $width, $height, $col, $row, $buttons, $id, $asset, $author, $params);
+			$return .= $this->setEditorSelector();
 
 			return $return;
 		}
@@ -247,13 +261,11 @@ class plgEditorSwitcher extends CMSPlugin
 	 *
 	 * @staticvar   null $selector
 	 *
-	 * @param string $current
-	 *
 	 * @return string
 	 *
 	 * @since       2.0
 	 */
-	private function setEditorSelector($current)
+	private function setEditorSelector()
 	{
 		static $selector = null;
 
@@ -277,30 +289,13 @@ class plgEditorSwitcher extends CMSPlugin
 			$query->order($db->qn('name'));
 
 			$db->setQuery($query);
-			$editors = $db->loadObjectList();
+			$this->editors = $db->loadObjectList();
 
-			if (count($editors) < 2)
+			if (count($this->editors) < 2)
 			{
 				$selector = '';
 
 				return $selector;
-			}
-
-			//Search Index of current editor
-			$count = 0;
-			$index = 0;
-			$array = array();
-
-			foreach ($editors as $o)
-			{
-				$array[$o->value] = $count;
-
-				if ($o->value == $current)
-				{
-					$index = $count;
-				}
-
-				$count++;
 			}
 
 			// Render the select field
@@ -325,9 +320,9 @@ class plgEditorSwitcher extends CMSPlugin
 	 */
 	public function onGetInsertMethod($name)
 	{
-		if (is_callable(array($this->_switchereditor, 'onGetInsertMethod')))
+		if (is_callable(array($this->switcherEditor, 'onGetInsertMethod')))
 		{
-			return $this->_switchereditor->onGetInsertMethod($name);
+			return $this->switcherEditor->onGetInsertMethod($name);
 		}
 
 		return '';
