@@ -16,7 +16,7 @@
 		<maintainer>Thomas Hunziker</maintainer>
 		<maintainerurl>https://www.bakual.net/</maintainerurl>
 		<targetplatform name="joomla" version="3.[89]|10"/>
-		<client>1</client>
+		<client>0</client>
 		<folder>editors</folder>
 	</update>
 </updates>
