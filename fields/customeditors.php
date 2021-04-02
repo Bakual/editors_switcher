@@ -1,14 +1,17 @@
 <?php
 /**
- * @package     EditorSwitcher
- *
- * @author      Thomas Hunziker <admin@bakual.net>
- * @copyright   © 2021 - Thomas Hunziker
- * @license     http://www.gnu.org/licenses/gpl.html
+ * @package    Editor Switcher
+ * @copyright  © 2021
+ * @license    http://www.gnu.org/licenses/gpl.html
+ * @author     Thomas Hunziker (www.bakual.net), Yoshiki Kozaki(www.joomler.net)
+ * @link       https://www.bakual.net/
  */
-defined('JPATH_PLATFORM') or die();
 
-JFormHelper::loadFieldClass('plugins');
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Form\FormHelper;
+
+FormHelper::loadFieldClass('plugins');
 
 /**
  * Renders an editors listfield

@@ -1,14 +1,10 @@
 <?php
 /**
- *            Plugin Editor Switcher
- * @version            2.0.0
- * @package            Editor Switcher
- * @copyright          Copyright (C) 2007-2012 Joomler!.net. All rights reserved.
- * @license            http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
- *
- * @author             Yoshiki Kozaki(www.joomler.net)
- * @link               http://www.joomler.net/
- *
+ * @package    Editor Switcher
+ * @copyright  © 2021
+ * @license    http://www.gnu.org/licenses/gpl.html
+ * @author     Thomas Hunziker (www.bakual.net), Yoshiki Kozaki (www.joomler.net)
+ * @link       https://www.bakual.net/
  */
 
 defined('_JEXEC') or die;

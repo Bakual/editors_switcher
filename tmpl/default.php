@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package    Editor Switcher
+ * @copyright  © 2021
+ * @license    http://www.gnu.org/licenses/gpl.html
+ * @author     Thomas Hunziker (www.bakual.net), Yoshiki Kozaki(www.joomler.net)
+ * @link       https://www.bakual.net/
+ */
 
 defined('_JEXEC') or die;
 
