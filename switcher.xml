@@ -9,6 +9,7 @@
 	<copyright>© 2021</copyright>
 	<license>http://www.gnu.org/licenses/gpl.html</license>
 	<description>PLG_EDITOR_SWITCHER_XML_DESCRIPTION</description>
+	<scriptfile>script.php</scriptfile>
 	<files>
 		<filename plugin="switcher">switcher.php</filename>
 		<folder>language</folder>
