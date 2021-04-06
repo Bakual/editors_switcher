@@ -62,3 +62,4 @@ $options = array(
 <div class="switcher-selector-wrapper btn-toolbar pull-right" style="margin-right:5px;">
 	<?php echo JHtml::_('select.genericlist', $this->editors, 'switcheditor', $options); ?>
 </div>
+<div class="clearfix"></div>
