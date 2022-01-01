@@ -26,7 +26,7 @@ class PlgEditorsSwitcherInstallerScript extends InstallerScript
 	 * @var    string
 	 * @since  3.6
 	 */
-	protected $minimumJoomla = '4.0.0';
+	protected $minimumJoomla = '3.10.0';
 	/**
 	 * A list of files to be deleted
 	 *
