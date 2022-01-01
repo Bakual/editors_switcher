@@ -4,6 +4,46 @@
 		<description>Editor Switcher Plugin</description>
 		<element>switcher</element>
 		<type>plugin</type>
+		<version>4.0.0</version>
+		<downloads>
+			<downloadurl type="full" format="zip">
+				https://github.com/Bakual/editors_switcher/archive/refs/tags/v4.0.0.zip
+			</downloadurl>
+		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+		<maintainer>Thomas Hunziker</maintainer>
+		<maintainerurl>https://www.bakual.net/</maintainerurl>
+		<targetplatform name="joomla" version="4.[01]"/>
+		<client>0</client>
+		<folder>editors</folder>
+	</update>
+	<update>
+		<name>Editor Switcher Plugin</name>
+		<description>Editor Switcher Plugin</description>
+		<element>switcher</element>
+		<type>plugin</type>
+		<version>4.0.0</version>
+		<downloads>
+			<downloadurl type="full" format="zip">
+				https://github.com/Bakual/editors_switcher/archive/refs/tags/v4.0.0.zip
+			</downloadurl>
+		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+		<maintainer>Thomas Hunziker</maintainer>
+		<maintainerurl>https://www.bakual.net/</maintainerurl>
+		<targetplatform name="joomla" version="3.10"/>
+		<client>0</client>
+		<folder>editors</folder>
+	</update>
+	<update>
+		<name>Editor Switcher Plugin</name>
+		<description>Editor Switcher Plugin</description>
+		<element>switcher</element>
+		<type>plugin</type>
 		<version>2.0.2</version>
 		<downloads>
 			<downloadurl type="full" format="zip">
