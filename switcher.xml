@@ -21,7 +21,7 @@
 	</updateservers>
 	<config>
 		<fields name="params" addfieldpath="/plugins/editors/switcher/fields">
-			<fieldset name="Basic">
+			<fieldset name="basic">
 				<field
 					name="default_editor"
 					type="customeditors"
