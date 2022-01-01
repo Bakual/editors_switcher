@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\Installer\Adapter\ComponentAdapter;
 
 /**
  * Script to remove old language files in the global folder
@@ -19,6 +20,27 @@ use Joomla\CMS\Installer\InstallerScript;
  */
 class PlgEditorsSwitcherInstallerScript extends InstallerScript
 {
+	/**
+	 * Minimum Joomla! version required to install the extension
+	 *
+	 * @var    string
+	 * @since  3.6
+	 */
+	protected $minimumJoomla = '4.0.0';
+	/**
+	 * A list of files to be deleted
+	 *
+	 * @var    array
+	 * @since  3.6
+	 */
+	protected $deleteFiles = array();
+	/**
+	 * A list of folders to be deleted
+	 *
+	 * @var    array
+	 * @since  3.6
+	 */
+	protected $deleteFolders = array();
 	/**
 	 * @var  string  During an update, it will be populated with the old release version
 	 *
@@ -29,8 +51,8 @@ class PlgEditorsSwitcherInstallerScript extends InstallerScript
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
-	 * @param   string                      $type    'install', 'update' or 'discover_install'
-	 * @param   JInstallerAdapterComponent  $parent  Installerobject
+	 * @param   string            $type    'install', 'update' or 'discover_install'
+	 * @param   ComponentAdapter  $parent  Installerobject
 	 *
 	 * @return  boolean  false will terminate the installation
 	 *
@@ -38,8 +60,6 @@ class PlgEditorsSwitcherInstallerScript extends InstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
-		$this->minimumJoomla = (string) $parent->get('manifest')->attributes()->version;
-
 		// Storing old release number for process in postflight
 		if (strtolower($type) == 'update')
 		{
