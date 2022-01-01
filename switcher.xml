@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.9" type="plugin" group="editors" method="upgrade">
+<extension version="4.0" type="plugin" group="editors" method="upgrade">
 	<name>plg_editors_switcher</name>
-	<version>2.0.2</version>
+	<version>4.0.0</version>
 	<author>Thomas Hunziker (www.bakual.net), Yoshiki Kozaki(www.joomler.net)</author>
 	<authorEmail>bakual@bakual.net</authorEmail>
 	<authorUrl>https://www.bakual.net</authorUrl>
-	<creationDate>2021-04-06</creationDate>
-	<copyright>© 2021</copyright>
+	<creationDate>2022-01-01</creationDate>
+	<copyright>© 2022</copyright>
 	<license>http://www.gnu.org/licenses/gpl.html</license>
 	<description>PLG_EDITOR_SWITCHER_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
