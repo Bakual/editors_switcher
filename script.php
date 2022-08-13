@@ -64,7 +64,7 @@ class PlgEditorsSwitcherInstallerScript extends InstallerScript
 		if (strtolower($type) == 'update')
 		{
 			$manifest         = $this->getItemArray('manifest_cache', '#__extensions', 'name', Factory::getDbo()->quote($parent->getName()));
-			$this->oldRelease = $manifest['version'];
+			$this->oldRelease = $manifest['version'] ?? JVersion::MAJOR_VERSION . '.' . JVersion::MINOR_VERSION;
 		}
 
 		return parent::preflight($type, $parent);
